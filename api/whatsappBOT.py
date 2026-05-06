@@ -1,6 +1,6 @@
 import logging
 
-from services.meta import send_meta_whatsapp_message
+from services.meta import send_kopagari_message
 from api.decision import handle_text_message
 
 logger = logging.getLogger("whatsapp_app")
@@ -93,7 +93,7 @@ async def whatsapp_menu(payload: dict):
         await handle_text_message(from_number, user_text, user_name)
     except Exception as e:
         logger.error(f"❌ Decision layer error: {e}", exc_info=True)
-        await send_meta_whatsapp_message(
+        await send_kopagari_message(
             from_number,
             "Samahani, tatizo limetokea. Tafadhali jaribu tena."
         )

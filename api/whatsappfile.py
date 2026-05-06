@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"]
 ALLOWED_PDF_TYPE = "application/pdf"
 
-META_ACCESS_TOKEN = os.getenv("META_ACCESS_TOKEN")
+META_ACCESS_TOKEN = os.getenv("ELIMUFEDHA_ACCESS_TOKEN")
 
 
 async def process_file_upload(

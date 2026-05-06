@@ -5,7 +5,7 @@ from services.intent import analyze_intent
 from services.claude_response import get_claude_response
 from services.car_search import search_listings, format_listings_for_whatsapp
 from services.magari_scout import fetch_on_demand, fetch_on_demand_background
-from services.meta import send_meta_whatsapp_message, send_mtaa_wa_manka_template
+from services.meta import send_kopagari_message, send_kopagari_mtaa_template
 from services.supabase import store_session_data
 from services.conversation import get_history, save_turn, clear_history
 
@@ -38,14 +38,14 @@ async def handle_text_message(from_number: str, user_text: str, user_name: str =
             "Tunakusaidia kupata mkopo wa kununua gari wa hadi milioni 100. Ukiwa na namba ya NIDA na bank statement za miezi 6, unaweza kujua kama unastahili ndani ya dakika 5 tu, bila malipo.\n\n"
             "Je ungependa nikuongoze hatua kwa hatua?"
         )
-        await send_meta_whatsapp_message(from_number, reply)
+        await send_kopagari_message(from_number, reply)
         save_turn(from_number, user_text, reply)
         logger.critical(f"✅ Flow initiation reply sent to {from_number}")
 
     elif intent == "loan_services_menu":
         token = str(uuid.uuid4())
         await store_session_data(phone_number=from_number, message=user_text, session_id=token)
-        await send_mtaa_wa_manka_template(to=from_number)
+        await send_kopagari_mtaa_template(to=from_number)
         logger.critical(f"✅ Loan services template sent to {from_number}")
 
     elif intent == "car_inquiry":
@@ -87,13 +87,13 @@ async def handle_text_message(from_number: str, user_text: str, user_name: str =
             logger.critical(f"🚗 No DB listings — using general knowledge (scout running in background)")
 
         reply = await get_claude_response(enriched_query, user_name, history=history)
-        await send_meta_whatsapp_message(from_number, reply)
+        await send_kopagari_message(from_number, reply)
         save_turn(from_number, user_text, reply)
         logger.critical(f"✅ Car inquiry answered for {from_number}")
 
     elif intent in ("car_import_cost", "loan_question", "faq", "loan_calculation"):
         reply = await get_claude_response(user_text, user_name, history=history)
-        await send_meta_whatsapp_message(from_number, reply)
+        await send_kopagari_message(from_number, reply)
         save_turn(from_number, user_text, reply)
         logger.critical(f"✅ Claude answer sent to {from_number} for intent={intent}")
 
@@ -102,13 +102,13 @@ async def handle_text_message(from_number: str, user_text: str, user_name: str =
             "Tafadhali tuma PDF ya taarifa yako ya benki moja kwa moja hapa. "
             "Mfumo wetu utaifanya uchambuzi wa uwezo wako wa kukopa. 📄"
         )
-        await send_meta_whatsapp_message(from_number, reply)
+        await send_kopagari_message(from_number, reply)
         save_turn(from_number, user_text, reply)
         logger.critical(f"✅ Document upload reminder sent to {from_number}")
 
     elif intent in ("general_conversation", "unknown"):
         # Let Claude handle conversationally using history for context
         reply = await get_claude_response(user_text, user_name, history=history)
-        await send_meta_whatsapp_message(from_number, reply)
+        await send_kopagari_message(from_number, reply)
         save_turn(from_number, user_text, reply)
         logger.critical(f"✅ Conversational reply sent to {from_number} for intent={intent}")
