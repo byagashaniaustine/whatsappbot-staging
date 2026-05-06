@@ -58,7 +58,7 @@ async def analyze_intent(text: str) -> dict:
                 raw = raw[4:]
             raw = raw.strip()
         result = json.loads(raw)
-        logger.critical(f"🧠 Intent analysis: {result}")
+        logger.info(f"🧠 Intent analysis: {result}")
         return result
     except Exception as e:
         logger.error(f"❌ Intent analysis failed: {e}")
