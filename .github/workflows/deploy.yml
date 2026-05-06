@@ -1,0 +1,47 @@
+name: Deployment - WhatsappBOT
+
+on:
+    push:
+        branches: [main]
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Deploy with Error Handling
+              uses: appleboy/ssh-action@master
+              with:
+                  host: 135.181.93.47
+                  username: ubuntu
+                  password: ${{ secrets.SSH_PASSWORD }}
+                  script: |
+                      set -e  # Exit immediately if any command fails
+                      set -o pipefail  # Also fail if any command in a pipeline fails
+                      
+                      echo "=== Starting deployment ==="
+                      cd /home/ubuntu/WhatsappBOT
+                      
+                      echo "=== Pulling latest code ==="
+                      git pull || { echo "Git pull failed"; exit 1; }
+                      
+                      echo "=== Setting up environment ==="
+                      if [ -d "env" ]; then
+                        source env/bin/activate
+                      else
+                        python3 -m venv env || { echo "Virtual env creation failed"; exit 1; }
+                        source env/bin/activate
+                      fi
+                      
+                      echo "=== Installing requirements ==="
+                      pip install -r requirements.txt || { echo "Requirements installation failed"; exit 1; }
+                      
+                      echo "=== Restarting service ==="
+                      sudo service whatsappbot restart || { echo "Service restart failed"; exit 1; }
+                      
+                      echo "=== Verification ==="
+                      sudo service whatsappbot status || { echo "Service not running"; exit 1; }
+                      
+                      echo "=== Deployment completed successfully ==="

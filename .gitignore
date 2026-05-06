@@ -1,7 +1,67 @@
-.venv/
+# --------------------
+# Environment/Secrets
+# --------------------
+# Local environment variables file (MUST NOT be committed)
+.env
+# Any other local secrets file
+*.key
+*.pem
+
+# --------------------
+# Python/OS Artifacts
+# --------------------
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-.env
+*$py.class
+# Distribution / packaging
+.Python
+build/
+dist/
+venv/
+env/
+*.egg-info
+.installed.cfg
+# Environments
+.venv
+.soy-bazaar-474713-p2-58f4b561f0cf.json
+
+# --------------------
+# IDE and Tooling
+# --------------------
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+
+# Jupyter/IPython
+.ipynb_checkpoints
+
+# --------------------
+# Logs and Databases
+# --------------------
+# Logs
 *.log
+# Local SQLite database (if used)
+*.db
+/db.sqlite3
+
+# --------------------
+# External Services
+# --------------------
+# Downloaded media files (if any are saved locally for testing)
+/temp_media/*
+/downloads/
+
+#google email api services#
+.token.json
+token.json
 .DS_Store
+.instagram_session
+.supabase_migration.sql
+
+# Staging repo — exclude nested repos and BFG artifacts
 WhatsappBOT/
+WhatsappBOT.git/
+WhatsappBOT.git.bfg-report/
